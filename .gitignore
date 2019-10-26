@@ -43,3 +43,16 @@ network/src/test/
 network/target/
 task-cancellation/target/
 utils/target/
+*.iml
+network/network.iml
+task-cancellation/task-cancellation.iml
+utils/utils.iml
+gradle/
+gradlew
+gradlew.bat
+network/build/generated/
+network/build/tmp/
+task-cancellation/build/generated/
+task-cancellation/build/tmp/
+utils/build/generated/
+utils/build/tmp/
