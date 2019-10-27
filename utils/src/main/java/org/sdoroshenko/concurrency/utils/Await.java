@@ -1,4 +1,4 @@
-package org.sdoroshenko.utils;
+package org.sdoroshenko.concurrency.utils;
 
 public class Await {
 

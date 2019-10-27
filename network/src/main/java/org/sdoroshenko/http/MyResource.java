@@ -1,6 +1,6 @@
 package org.sdoroshenko.http;
 
-import org.sdoroshenko.utils.Await;
+import org.sdoroshenko.concurrency.utils.Await;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

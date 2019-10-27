@@ -8,29 +8,16 @@ import java.math.BigDecimal;
 /**
  * Bank account operations.
  */
-public class TransactionManager {
+public class ThreadSafeTransactionManager {
 
-    private static final Logger log = LoggerFactory.getLogger(TransactionManager.class);
+    private static final Logger log = LoggerFactory.getLogger(ThreadSafeTransactionManager.class);
     private final int operationalTimeout;
 
-    public TransactionManager(int operationalTimeout) {
+    public ThreadSafeTransactionManager(int operationalTimeout) {
         this.operationalTimeout = operationalTimeout;
     }
 
     public void exec(Account from, Account to, long sum) {
-        if (from.getAmount().compareTo(new BigDecimal(sum)) <= 0) {
-            throw new IllegalArgumentException(
-                    String.format("From amount [%s] lq sum[%d]", from.getAmount(), sum)
-            );
-        }
-        log.info("Executing transaction, from: {}, to: {}, sum: {}", new Object[]{from, to, sum});
-        from.subtract(sum);
-        operationTimeout();
-        to.add(sum);
-        log.info("Completed transaction, from: {}, to: {}, sum: {}", new Object[]{from, to, sum});
-    }
-
-    public void execSync(Account from, Account to, long sum) {
         if (from.getAmount().compareTo(new BigDecimal(sum)) <= 0) {
             throw new IllegalArgumentException(
                     String.format("From amount [%s] lq sum[%d]", from.getAmount(), sum)

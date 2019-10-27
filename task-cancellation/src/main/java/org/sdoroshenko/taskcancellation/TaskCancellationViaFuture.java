@@ -1,8 +1,8 @@
 package org.sdoroshenko.taskcancellation;
 
 
-import org.sdoroshenko.utils.Await;
-import org.sdoroshenko.utils.LaunderThrowable;
+import org.sdoroshenko.concurrency.utils.Await;
+import org.sdoroshenko.concurrency.utils.LaunderThrowable;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;

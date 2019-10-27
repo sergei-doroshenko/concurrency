@@ -10,12 +10,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-public class TransactionManagerTest {
+import static org.junit.Assert.assertNotEquals;
+
+public class NotThreadSafeTransactionManagerTest {
 
     Account dollars;
     Account euros;
     Map<Integer, Account> accounts;
-    TransactionManager txManager;
+    NotThreadSafeTransactionManager txManager;
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +29,7 @@ public class TransactionManagerTest {
         accounts = new HashMap<>();
         accounts.put(1, dollars);
         accounts.put(2, euros);
-        txManager = new TransactionManager(100);
+        txManager = new NotThreadSafeTransactionManager(100);
     }
 
     @After
@@ -58,9 +60,9 @@ public class TransactionManagerTest {
         executor.submit(getRunnable(startLatch, finishLatch, dollars, euros, 400)); // USD=900 EUR=600
 
         finishLatch.await();
-        Assert.assertNotEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
-        Assert.assertNotEquals(900, dollars.getAmount().longValue());
-        Assert.assertNotEquals(600, euros.getAmount().longValue());
+        assertNotEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
+        assertNotEquals(900, dollars.getAmount().longValue());
+        assertNotEquals(600, euros.getAmount().longValue());
     }
 
     /**
@@ -80,16 +82,12 @@ public class TransactionManagerTest {
         );
 
         finishLatch.await();
-        Assert.assertNotEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
+        assertNotEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
     }
 
-    /**
-     * Tests transaction execution WITH appropriate synchronization in a loop.
-     * Should always pass.
-     * @throws InterruptedException in {@link CountDownLatch#await()}
-     */
+    @Ignore
     @Test
-    public void executeTransactionSync() throws InterruptedException {
+    public void executeTransactionLoop() throws InterruptedException {
         int threads = 20;
         ExecutorService executor = Executors.newFixedThreadPool(threads);
         CountDownLatch startLatch = new CountDownLatch(threads);
@@ -99,7 +97,7 @@ public class TransactionManagerTest {
         );
 
         finishLatch.await();
-        Assert.assertEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
+        assertNotEquals(1500, dollars.getAmount().longValue() + euros.getAmount().longValue());
     }
 
     private Runnable getRunnable(CountDownLatch sl, CountDownLatch fl, Account from, Account to, long sum) {
@@ -151,7 +149,7 @@ public class TransactionManagerTest {
                 Thread.currentThread().interrupt();
                 return;
             }
-            txManager.execSync(from, to, sum);
+            txManager.exec(from, to, sum);
             fl.countDown();
         };
     }

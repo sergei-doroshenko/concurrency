@@ -1,7 +1,7 @@
 package org.sdoroshenko.taskcancellation;
 
 
-import org.sdoroshenko.utils.Await;
+import org.sdoroshenko.concurrency.utils.Await;
 
 import java.util.concurrent.*;
 
