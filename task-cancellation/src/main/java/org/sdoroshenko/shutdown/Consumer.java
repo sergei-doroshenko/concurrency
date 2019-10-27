@@ -47,6 +47,9 @@ public class Consumer extends Thread {
         System.out.printf("Consumer stopped. Operations: %d, sum: %d, avg: %d\n", counter, sum, sum / counter);
     }
 
+    /**
+     * [34.5 %] [============>           ] 45.5 MB.
+     */
     private void printProgress(int counter) {
         int size = 20;
         for (int i = 0; i < counter; i++) {
