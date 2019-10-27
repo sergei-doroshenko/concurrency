@@ -56,3 +56,14 @@ task-cancellation/build/generated/
 task-cancellation/build/tmp/
 utils/build/generated/
 utils/build/tmp/
+deadlock/build/classes/java/main/META-INF/
+deadlock/build/classes/java/test/META-INF/
+deadlock/build/generated/
+deadlock/build/reports/
+deadlock/build/test-results/
+deadlock/build/tmp/
+deadlock/src/main/resources/
+task-cancellation/src/main/resources/
+task-cancellation/src/test/
+utils/src/main/resources/
+utils/src/test/
