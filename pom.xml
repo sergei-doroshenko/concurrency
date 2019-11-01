@@ -13,6 +13,7 @@
         <module>task-cancellation</module>
         <module>network</module>
         <module>utils</module>
+        <module>examples</module>
     </modules>
 
     <properties>
