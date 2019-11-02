@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -30,12 +31,12 @@ public class Philosopher extends Thread {
     public void run() {
         log.info("started");
         while (!queue.isEmpty()) {
-            eat(queue);
+            eat();
             think(1000);
         }
     }
 
-    public void eat(Queue<Integer> queue) {
+    public void eat() {
         if (left.getId() < right.getId()) {
             synchronized (left) {
                 while (!left.isFree()) {
@@ -57,7 +58,10 @@ public class Philosopher extends Thread {
                     }
                     right.setFree(false);
 
-                    Integer val = queue.poll();
+                    Integer val;
+                    synchronized (queue) {
+                        val = queue.poll();
+                    }
                     if (val != null) {
                         // in run method in  'while (!queue.isEmpty())' queue can be not empty, but then became empty
                         log.info("eating {}", val);
@@ -92,7 +96,10 @@ public class Philosopher extends Thread {
                     }
                     left.setFree(false);
 
-                    Integer val = queue.poll();
+                    Integer val;
+                    synchronized (queue) {
+                        val = queue.poll();
+                    }
                     if (val != null) {
                         // in run method in  'while (!queue.isEmpty())' queue can be not empty, but then became empty
                         log.info("eating {}", val);

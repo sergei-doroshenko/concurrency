@@ -60,8 +60,8 @@ public class PhilosopherTest {
         log.info("{} eat: {} = {}", new Object[]{nietzsche.getName(), nietzsche.getList(), nietzsche.getSum()});
         log.info("{} eat: {} = {}", new Object[]{kant.getName(), kant.getList(), kant.getSum()});
 
-//        assertEquals(laoTzu.getSum() + plato.getSum() + socrates.getSum() + nietzsche.getSum() + kant.getSum(), sum);
         assertTrue(true);
+        assertEquals(laoTzu.getSum() + plato.getSum() + socrates.getSum() + nietzsche.getSum() + kant.getSum(), sum);
     }
 
     private <T> Collector<T, ?, Queue<T>> toLinkedList() {
