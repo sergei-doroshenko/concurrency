@@ -10,14 +10,14 @@ import java.util.Queue;
 /**
  * Dining Philosophers Problem.
  */
-public class Philosopher extends Thread {
-    private static final Logger log = LoggerFactory.getLogger(Philosopher.class);
+public class PhilosopherSyncOrder extends Thread {
+    private static final Logger log = LoggerFactory.getLogger(PhilosopherSyncOrder.class);
     private final List<Integer> list;
     private final Queue<Integer> queue;
     private final Fork left;
     private final Fork right;
 
-    public Philosopher(String name, Queue<Integer> queue, Fork left, Fork right) {
+    public PhilosopherSyncOrder(String name, Queue<Integer> queue, Fork left, Fork right) {
         setDaemon(true);
         setName(name);
         this.list = new ArrayList<>();
@@ -38,24 +38,7 @@ public class Philosopher extends Thread {
     public void eat(Queue<Integer> queue) {
         if (left.getId() < right.getId()) {
             synchronized (left) {
-                while (!left.isFree()) {
-                    try {
-                        left.wait();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-                left.setFree(false);
-
                 synchronized (right) {
-                    while (!right.isFree()) {
-                        try {
-                            right.wait();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    right.setFree(false);
 
                     Integer val = queue.poll();
                     if (val != null) {
@@ -63,34 +46,11 @@ public class Philosopher extends Thread {
                         log.info("eating {}", val);
                         list.add(val);
                     }
-
-                    right.setFree(true);
-                    right.notifyAll();
                 }
-
-                left.setFree(true);
-                left.notifyAll();
             }
         } else {
             synchronized (right) {
-                while (!right.isFree()) {
-                    try {
-                        right.wait();
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-                right.setFree(false);
-
                 synchronized (left) {
-                    while (!left.isFree()) {
-                        try {
-                            left.wait();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    left.setFree(false);
 
                     Integer val = queue.poll();
                     if (val != null) {
@@ -98,13 +58,7 @@ public class Philosopher extends Thread {
                         log.info("eating {}", val);
                         list.add(val);
                     }
-
-                    left.setFree(true);
-                    left.notifyAll();
                 }
-
-                right.setFree(true);
-                right.notifyAll();
             }
         }
     }
