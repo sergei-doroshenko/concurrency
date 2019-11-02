@@ -14,6 +14,7 @@
         <module>network</module>
         <module>utils</module>
         <module>examples</module>
+        <module>jcip</module>
     </modules>
 
     <properties>
