@@ -1,0 +1,53 @@
+l - f1, r - f2
+"Ph-1@1703" prio=5 tid=0xf nid=NA waiting for monitor entry
+  java.lang.Thread.State: BLOCKED
+	 waiting for Ph-5@1706 to release lock on <0x6b2> (a org.sdoroshenko.concurrency.examples.philosophers.Fork)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.eat(Philosopher.java:43)
+		synchronized (left) {
+			while (!left.isFree()) { // on f1
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:35)
+
+l - f2, r - f3
+"Ph-2@1704" prio=5 tid=0x10 nid=NA waiting for monitor entry
+  java.lang.Thread.State: BLOCKED
+	 waiting for Ph-3@1705 to release lock on <0x6b4> (a org.sdoroshenko.concurrency.examples.philosophers.Fork)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.eat(Philosopher.java:53)
+	  synchronized (right) {
+        while (!right.isFree()) { // on f3
+	  - locked <0x6b3> (a org.sdoroshenko.concurrency.examples.philosophers.Fork)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:35)	  
+
+l - f3, r - f4	  
+"Ph-3@1705" prio=5 tid=0x11 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Ph-2@1704
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Object.wait(Object.java:328)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.eat(Philosopher.java:55)
+		right.wait(); // on f3
+	  - locked <0x6b4> (a org.sdoroshenko.concurrency.examples.philosophers.Fork)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:35)
+
+l - f4, r - f5	  
+"Ph-4@1707" prio=5 tid=0x12 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Object.wait(Object.java:328)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.eat(Philosopher.java:45)
+		 left.wait(); // on f4
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:35)	  
+
+l - f5, r - f1	  
+"Ph-5@1706" prio=5 tid=0x13 nid=NA waiting
+  java.lang.Thread.State: WAITING
+	 blocks Ph-1@1703
+	  at java.lang.Object.wait(Object.java:-1)
+	  at java.lang.Object.wait(Object.java:328)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.eat(Philosopher.java:91)
+		left.wait(); // on f5
+	  - locked <0x6b2> (a org.sdoroshenko.concurrency.examples.philosophers.Fork)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:35)
+
+
+
+

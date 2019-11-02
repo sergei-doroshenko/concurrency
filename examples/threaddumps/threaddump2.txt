@@ -1,0 +1,29 @@
+"1-Lao Tzu@2125" prio=5 tid=0xf nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.think(Philosopher.java:120)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:40)
+
+"2-Plato@2133" prio=5 tid=0x10 nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.think(Philosopher.java:120)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:40)
+
+"3-Socrates@2134" prio=5 tid=0x11 nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.think(Philosopher.java:120)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:40)
+
+"4-Nietzsche@2135" prio=5 tid=0x12 nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.think(Philosopher.java:120)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:40)
+
+"5-Kant@2132" prio=5 tid=0x13 nid=NA sleeping
+  java.lang.Thread.State: TIMED_WAITING
+	  at java.lang.Thread.sleep(Thread.java:-1)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.think(Philosopher.java:120)
+	  at org.sdoroshenko.concurrency.examples.philosophers.Philosopher.run(Philosopher.java:40)
