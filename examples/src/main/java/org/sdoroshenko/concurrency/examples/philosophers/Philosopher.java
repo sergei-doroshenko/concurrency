@@ -1,26 +1,24 @@
 package org.sdoroshenko.concurrency.examples.philosophers;
 
+import org.sdoroshenko.concurrency.utils.Await;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
 /**
  * Dining Philosophers Problem.
- *
- *         Ph-1
- *    Ph-2
- * Ph-3         Ph-5
- *       Ph-4
  */
 public class Philosopher extends Thread {
-    private final String name;
+    private static final Logger log = LoggerFactory.getLogger(Philosopher.class);
     private final List<Integer> list;
     private final Queue<Integer> queue;
     private final Fork left;
     private final Fork right;
 
     public Philosopher(String name, Queue<Integer> queue, Fork left, Fork right) {
-        this.name = name;
         setName(name);
         this.list = new ArrayList<>();
         this.queue = queue;
@@ -30,7 +28,7 @@ public class Philosopher extends Thread {
 
     @Override
     public void run() {
-        System.out.println(name + " started");
+        log.info("started");
         while (!queue.isEmpty()) {
             eat(queue);
             think(1000);
@@ -60,12 +58,11 @@ public class Philosopher extends Thread {
                     right.setFree(false);
 
                     Integer val = queue.poll();
-                    if (val == null) {
+                    if (val != null) {
                         // in run method in  'while (!queue.isEmpty())' queue can be not empty, but then became empty
-                        return;
+                        log.info("eating {}", val);
+                        list.add(val);
                     }
-                    System.out.println(name + " eating: " + val);
-                    list.add(val);
 
                     right.setFree(true);
                     right.notifyAll();
@@ -96,12 +93,11 @@ public class Philosopher extends Thread {
                     left.setFree(false);
 
                     Integer val = queue.poll();
-                    if (val == null) {
+                    if (val != null) {
                         // in run method in  'while (!queue.isEmpty())' queue can be not empty, but then became empty
-                        return;
+                        log.info("eating {}", val);
+                        list.add(val);
                     }
-                    System.out.println(name + " eating: " + val);
-                    list.add(val);
 
                     left.setFree(true);
                     left.notifyAll();
@@ -114,14 +110,14 @@ public class Philosopher extends Thread {
     }
 
     public void think(long time) {
-        try {
-            sleep(time);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        Await.await1(time);
     }
 
     public List<Integer> getList() {
         return list;
+    }
+
+    public int getSum() {
+        return list.stream().mapToInt(Integer::intValue).sum();
     }
 }
