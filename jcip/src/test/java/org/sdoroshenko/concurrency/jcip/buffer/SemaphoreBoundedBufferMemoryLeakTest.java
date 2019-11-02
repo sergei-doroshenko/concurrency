@@ -5,6 +5,11 @@ import org.sdoroshenko.concurrency.utils.MemoryUnit;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ * Memory leak test.
+ *
+ * @author Brian Goetz and Tim Peierls
+ */
 public class SemaphoreBoundedBufferMemoryLeakTest {
 
     private static final int CAPACITY  = 10000;

@@ -10,6 +10,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Producer-consumer test program for BoundedBuffer.
+ *
+ * @author Brian Goetz and Tim Peierls
+ */
 public class SemaphoreBoundedBufferPutTakeTest {
     protected ExecutorService pool;
     protected CyclicBarrier barrier;
