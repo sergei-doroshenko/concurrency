@@ -16,7 +16,7 @@ public class PhilosopherSyncOrderTest {
     private static final Logger log = LoggerFactory.getLogger(PhilosopherSyncOrderTest.class);
 
     @Test(timeOut = 30 * 1000)
-    public void testRun() throws InterruptedException {
+    public void run() throws InterruptedException {
         int endExclusive = 100;
         Collector<Integer, ?, Queue<Integer>> collector = Collector.of(
                 LinkedList::new,
@@ -32,18 +32,19 @@ public class PhilosopherSyncOrderTest {
 
         Fork f1 = new Fork(1);
         Fork f2 = new Fork(2);
-        PhilosopherSyncOrder laoTzu = new PhilosopherSyncOrder("1-Lao Tzu", queue, f1, f2);
+        int thinkingTime = 100;
+        PhilosopherSyncOrder laoTzu = new PhilosopherSyncOrder("1-Lao Tzu", queue, f1, f2, thinkingTime);
 
         Fork f3 = new Fork(3);
-        PhilosopherSyncOrder plato = new PhilosopherSyncOrder("2-Plato", queue, f2, f3);
+        PhilosopherSyncOrder plato = new PhilosopherSyncOrder("2-Plato", queue, f2, f3, thinkingTime);
 
         Fork f4 = new Fork(4);
-        PhilosopherSyncOrder socrates = new PhilosopherSyncOrder("3-Socrates", queue, f3, f4);
+        PhilosopherSyncOrder socrates = new PhilosopherSyncOrder("3-Socrates", queue, f3, f4, thinkingTime);
 
         Fork f5 = new Fork(5);
-        PhilosopherSyncOrder nietzsche = new PhilosopherSyncOrder("4-Nietzsche", queue, f4, f5);
+        PhilosopherSyncOrder nietzsche = new PhilosopherSyncOrder("4-Nietzsche", queue, f4, f5, thinkingTime);
 
-        PhilosopherSyncOrder kant = new PhilosopherSyncOrder("5-Kant", queue, f5, f1);
+        PhilosopherSyncOrder kant = new PhilosopherSyncOrder("5-Kant", queue, f5, f1, thinkingTime);
 
         laoTzu.start();
         plato.start();

@@ -16,22 +16,24 @@ public class PhilosopherSyncOrder extends Thread {
     private final Queue<Integer> queue;
     private final Fork left;
     private final Fork right;
+    private final int thinkingTime;
 
-    public PhilosopherSyncOrder(String name, Queue<Integer> queue, Fork left, Fork right) {
+    public PhilosopherSyncOrder(String name, Queue<Integer> queue, Fork left, Fork right, int thinkingTime) {
         setDaemon(true);
         setName(name);
         this.list = new ArrayList<>();
         this.queue = queue;
         this.left = left;
         this.right = right;
+        this.thinkingTime = thinkingTime;
     }
 
     @Override
     public void run() {
         log.info("started");
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty() && !isInterrupted()) {
             eat(queue);
-            think(1000);
+            think(thinkingTime);
         }
     }
 
@@ -67,7 +69,7 @@ public class PhilosopherSyncOrder extends Thread {
         try {
             sleep(time);
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            interrupt();
         }
     }
 

@@ -26,20 +26,21 @@ public class PhilosopherTest {
         Queue<Integer> queue = IntStream.range(1, endExclusive).boxed().collect(toLinkedList());
         int sum = endExclusive * (endExclusive - 1) / 2;
 
+        int thinkingTime = 100;
         Fork f1 = new Fork(1);
         Fork f2 = new Fork(2);
-        Philosopher laoTzu = new Philosopher("1-Lao Tzu", queue, f1, f2);
+        Philosopher laoTzu = new Philosopher("1-Lao Tzu", queue, f1, f2, thinkingTime);
 
         Fork f3 = new Fork(3);
-        Philosopher plato = new Philosopher("2-Plato", queue, f2, f3);
+        Philosopher plato = new Philosopher("2-Plato", queue, f2, f3, thinkingTime);
 
         Fork f4 = new Fork(4);
-        Philosopher socrates = new Philosopher("3-Socrates", queue, f3, f4);
+        Philosopher socrates = new Philosopher("3-Socrates", queue, f3, f4, thinkingTime);
 
         Fork f5 = new Fork(5);
-        Philosopher nietzsche = new Philosopher("4-Nietzsche", queue, f4, f5);
+        Philosopher nietzsche = new Philosopher("4-Nietzsche", queue, f4, f5, thinkingTime);
 
-        Philosopher kant = new Philosopher("5-Kant", queue, f5, f1);
+        Philosopher kant = new Philosopher("5-Kant", queue, f5, f1, thinkingTime);
 
         laoTzu.start();
         plato.start();

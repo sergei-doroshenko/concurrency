@@ -17,22 +17,24 @@ public class Philosopher extends Thread {
     private final Queue<Integer> queue;
     private final Fork left;
     private final Fork right;
+    private final int thinkingTime;
 
-    public Philosopher(String name, Queue<Integer> queue, Fork left, Fork right) {
+    public Philosopher(String name, Queue<Integer> queue, Fork left, Fork right,  int thinkingTime) {
         setDaemon(true);
         setName(name);
         this.list = new ArrayList<>();
         this.queue = queue;
         this.left = left;
         this.right = right;
+        this.thinkingTime = thinkingTime;
     }
 
     @Override
     public void run() {
         log.info("started");
-        while (!queue.isEmpty()) {
+        while (!queue.isEmpty() && !isInterrupted()) {
             eat();
-            think(1000);
+            think(thinkingTime);
         }
     }
 
