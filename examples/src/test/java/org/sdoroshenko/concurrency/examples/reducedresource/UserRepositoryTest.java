@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * @author Sergei_Doroshenko
+ * @author Sergei Doroshenko
  * @see UserRepository
  * @since 1.0
  * @version 1.0

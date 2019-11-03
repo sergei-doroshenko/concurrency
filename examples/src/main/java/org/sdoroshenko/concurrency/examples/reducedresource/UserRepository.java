@@ -13,23 +13,25 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * findUserByUsername and findUserByUserId use a resource that can only be used by ONE thread at a time.
  * There is a limited pool of these resources that is much smaller than the number of threads used by the application.
  * e.g. database connection pool.
- *
+ * <p>
  * Leverage the cache to optimise the performance of the method over time.
- *
+ * <p>
  * Here we need to reduce applications threads, so we don't use one executor with a lot of threads.
- *
+ * <p>
  * The example solution addresses the followup question
  * "How do you prevent two threads from performing findByUsername for the same input at the same time?".
- *
+ * <p>
  * When I present this question in an interview, I say that the reason findById is fast is because
  * it connects to a distributed in-memory data store. The reason findByUsername is slow is because
  * it performs an HTTP call. In addition, the HTTP functionality is backed by a connection pool that is much smaller
  * than the number of threads in the application (e.g. if the web application has 200 threads,
  * there may only be 10 socket connections). So, how do you AVOID WASTING two socket connections for the SAME DATA?
- *
+ * <p>
  * By the way, this may not be the most optimal solution although to be fair,
  * what is optimal may depend on usage patterns.
  * The best answer I've seen so far required Java 8-specific features (CompletableFuture).
+ *
+ * @author Sergei Doroshenko
  */
 public class UserRepository {
 
@@ -55,15 +57,16 @@ public class UserRepository {
         this.cache = new HashMap<>();
         // 4 executors
         this.singleThreadExecutors = Arrays.asList(
-            Executors.newSingleThreadExecutor(),
-            Executors.newSingleThreadExecutor(),
-            Executors.newSingleThreadExecutor(),
-            Executors.newSingleThreadExecutor()
+                Executors.newSingleThreadExecutor(),
+                Executors.newSingleThreadExecutor(),
+                Executors.newSingleThreadExecutor(),
+                Executors.newSingleThreadExecutor()
         );
     }
 
     /**
      * The reason findUserByUserId is fast is because it connects to a distributed in-memory data store.
+     *
      * @param id a user id
      * @return a {@link User}
      */
@@ -73,6 +76,7 @@ public class UserRepository {
 
     /**
      * The reason findByUsername is slow is because it performs an HTTP call.
+     *
      * @param username a user's name
      * @return a {@link User}
      */
@@ -88,45 +92,47 @@ public class UserRepository {
      * 4. LOCK read lock
      * 5. Read data from cache and return it
      * 6. Finally UNLOCK read lock
+     *
      * @param username used as a KEY to store retrieved id in the {@link #cache}.
      * @return a {@link User}
      * @throws Exception
      */
     public User getUserByUsername(final String username) throws Exception {
-        lock.readLock().lock();
+        boolean containsKey;
         try {
-            if (!cache.containsKey(username)) {
-                lock.readLock().unlock(); // Why are we unlocking here? We need to unlock to obtain write access.
-                // Read Access   	If no threads are writing, and no threads have requested write access.
-                // Write Access   	If no threads are reading or writing.
+            lock.readLock().lock();
+            containsKey = cache.containsKey(username);
+        } finally {
+            lock.readLock().unlock();
+        }
+
+        if (!containsKey) {
+            // Read Access   	If no threads are writing, and no threads have requested write access.
+            // Write Access   	If no threads are reading or writing.
+            try {
                 lock.writeLock().lock();
                 // We need this check, because 2 thread can try to obtain write lock, so when first thread writes to the cache
                 // and released writeLock second thread can obtain writeLock and make additional write.
                 // Another option is to double check the cache.
                 if (!cache.containsKey(username)) {
-                    try {
-                        System.out.println("Call http for: " + username);
-                        final User user = shardedFind(username);
-                        cache.put(username, user.getId()); // We put username argument, not user.getUsername()
-                    } finally {
-                        lock.writeLock().unlock();
-                    }
+                    System.out.println("Call http for: " + username);
+                    final User user = shardedFind(username);
+                    cache.put(username, user.getId()); // We put username argument, not user.getUsername()
                 }
-
-                lock.readLock().lock(); // Why do we need to re-obtain a read lock? Test for this. Because cache data can be cleaned.
+            } finally {
+                lock.writeLock().unlock();
             }
-//            lock.readLock().lock(); // Why do we need to re-obtain a read lock? When commented - test fails 2 http calls instead 1
-            // We either obtain it in first line or after cache put
-            return findByUserId(cache.get(username));
-        } finally {
-            lock.readLock().unlock();
         }
+
+        return findByUserId(cache.get(username));
+
     }
 
     /**
      * 1. calculate shard number
      * 2. get single thread executor by shard number
      * 3. submit task to received executor
+     *
      * @param username
      * @return
      * @throws InterruptedException
