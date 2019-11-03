@@ -34,7 +34,7 @@ public class Philosopher extends Thread {
         log.info("started");
         while (!queue.isEmpty() && !isInterrupted()) {
             eat();
-            think(thinkingTime);
+            think();
         }
     }
 
@@ -118,9 +118,10 @@ public class Philosopher extends Thread {
         }
     }
 
-    public void think(long time) {
+    public void think() {
         try {
-            sleep(time);
+            log.info("thinking...");
+            sleep(thinkingTime);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
