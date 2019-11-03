@@ -99,8 +99,8 @@ public class UserRepository {
      */
     public User getUserByUsername(final String username) throws Exception {
         boolean containsKey;
+        lock.readLock().lock();
         try {
-            lock.readLock().lock();
             containsKey = cache.containsKey(username);
         } finally {
             lock.readLock().unlock();
@@ -109,8 +109,8 @@ public class UserRepository {
         if (!containsKey) {
             // Read Access   	If no threads are writing, and no threads have requested write access.
             // Write Access   	If no threads are reading or writing.
+            lock.writeLock().lock();
             try {
-                lock.writeLock().lock();
                 // We need this check, because 2 thread can try to obtain write lock, so when first thread writes to the cache
                 // and released writeLock second thread can obtain writeLock and make additional write.
                 // Another option is to double check the cache.
