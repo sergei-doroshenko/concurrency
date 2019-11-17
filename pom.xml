@@ -15,6 +15,7 @@
         <module>utils</module>
         <module>examples</module>
         <module>jcip</module>
+        <module>space-counter</module>
     </modules>
 
     <properties>
