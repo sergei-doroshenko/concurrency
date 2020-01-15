@@ -21,7 +21,7 @@ public class SizeCalculationTaskTest {
         SizeCalculationTask task = new SizeCalculationTask(root);
         long size = pool.invoke(task);
         System.out.println(workingPath + " size: " + toKiloBytes(size) + " KB");
-        assertEquals(toKiloBytes(size), 17);
+        assertEquals(toKiloBytes(size), 159);
     }
 
     private long toKiloBytes(long bytes) {
