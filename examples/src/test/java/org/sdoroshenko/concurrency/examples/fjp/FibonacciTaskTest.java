@@ -13,6 +13,10 @@ public class FibonacciTaskTest {
         int fibEnd = 20;
         ForkJoinPool pool = new ForkJoinPool();
 
+        System.out.println("Parallelism: " + pool.getParallelism());
+        System.out.println("Pool size: " + pool.getPoolSize());
+        System.out.println("# task in queue: " + pool.getQueuedTaskCount());
+
         FibonacciTask task = new FibonacciTask(fibEnd);
         Integer fibNum = pool.invoke(task);
         System.out.println("FibNumber: " + fibNum + " for: " + fibEnd);

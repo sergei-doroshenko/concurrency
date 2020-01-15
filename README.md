@@ -1,6 +1,8 @@
 # concurrency
-Java Concurrency example
+Java Concurrency example  
+
 ##Fork-Join Pool Examples
-1. [FibonacciTask.java](src/main/java/org/sdoroshenko/concurrency/examples/fjp/FibonacciTask.java)
-2. [MergeSortTask.java](src/main/java/org/sdoroshenko/concurrency/examples/fjp/MergeSortTask.java)
-3. [SizeCalculationTask.java](src/main/java/org/sdoroshenko/spacecounter/SizeCalculationTask.java)
+1. [FibonacciTask.java](examples/src/main/java/org/sdoroshenko/concurrency/examples/fjp/FibonacciTask.java)
+2. [MergeSortTask.java](examples/src/main/java/org/sdoroshenko/concurrency/examples/fjp/MergeSortTask.java)
+3. [SizeCalculationTask.java](space-counter/src/main/java/org/sdoroshenko/spacecounter/SizeCalculationTask.java)  
+1:24:41
