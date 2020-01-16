@@ -11,7 +11,9 @@ public class OpenSalarySociety {
                 .thenCombine(
                         CompletableFuture.supplyAsync(() -> " World")
                                 .thenApply(str -> str.length()), (s1, s2) -> s1 + s2
-                ).join();
+                )
+//            .exceptionally(e -> System.out.println(e.fillInStackTrace(); return 1;))
+            .join();
 
         // thenCombine
         System.out.println(result);

@@ -7,4 +7,18 @@ Java Concurrency example
 3. [SizeCalculationTask.java](space-counter/src/main/java/org/sdoroshenko/spacecounter/SizeCalculationTask.java)  
 
 ##CompletebleFuture Examples  
-1:44:07
+CompleteableFuture methods  
+
+| map | reduce | notes |  
+|:--- |:--- | ---:|  
+| thenApply() |  | in the caller thread |  
+| thenAcceptAsync() |  | in the separate thread |  
+| thenRun() |  | in the caller thread |  
+| thenRunAsync() |  | in the separate thread |  
+|  | henCombine() |  |  
+|  | allOf() |  |  
+
+thenCompose() => flatMap  
+obtrudeValue(T value) => 
+
+27:53
