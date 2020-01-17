@@ -16,6 +16,7 @@
         <module>examples</module>
         <module>jcip</module>
         <module>space-counter</module>
+        <module>akka-java</module>
     </modules>
 
     <properties>
