@@ -8,30 +8,30 @@ public class AssemblyActor extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
     @Override
-    public void preStart() throws Exception, Exception {
+    public void preStart() throws Exception {
         super.preStart();
         log.info("Actor was born: {}", this.self());
     }
 
     @Override
-    public void postStop() throws Exception, Exception {
+    public void postStop() throws Exception {
         super.postStop();
         log.info("Actor was died: {}", this.self());
+    }
+
+    private Command getCommand() {
+        return Command.InstallCPU;
     }
 
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-            .matchEquals(Command.InstallCPU, command -> {
-                log.info("Got string message: {} from: {}", command, this.sender());
-            })
-            .match(String.class, s -> {
-                log.info("Got string message: {} from: {}", s, this.sender());
-                if (!s.startsWith("Echo")) {
-                    this.getSender().tell("Echo: " + s, this.self());
-                }
+            .matchEquals(getCommand(), command -> {
+                log.info("Got command: {} from: {}", command, this.sender());
             })
             .matchAny(o -> log.warning("Unknown message"))
             .build();
     }
+
+
 }

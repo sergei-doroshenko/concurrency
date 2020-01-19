@@ -5,6 +5,8 @@ import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.*;
 
+import java.util.function.Function;
+
 public class Ex_02 {
     interface Message {
     }
