@@ -1,6 +1,6 @@
 package org.sdoroshenko.akkatypedjava.psassembly;
 
-import akka.actor.ActorSystem;
+import java.util.concurrent.CompletionStage;
 
 /**
  * install CPU -> priming processor -> affixing cooler
@@ -18,9 +18,15 @@ import akka.actor.ActorSystem;
  * Firmware tweaks
  * Installing the OS and drivers
  */
-public class PCAssembly {
+public class PCAssemblyApp {
     public static void main(String[] args) {
-        ActorSystem system = ActorSystem.create("ROOT");
+        AssemblyService service = new AssemblyService();
 
+        PC pc = new PC();
+        System.out.println(pc);
+        CompletionStage<PC> result = service.installCPU(pc);
+        result.whenComplete((reply, failure) -> System.out.println("Reply: " + reply + ", " + "Failure: " + failure));
+
+        service.shutdown();
     }
 }

@@ -1,4 +1,4 @@
-package org.sdoroshenko.akkatypedjava;
+package org.sdoroshenko.akkatypedjava.samples;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;

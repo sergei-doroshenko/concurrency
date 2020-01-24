@@ -1,4 +1,4 @@
-package org.sdoroshenko.akkatypedjava;
+package org.sdoroshenko.akkatypedjava.samples;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
@@ -67,7 +67,7 @@ public class CookieFabric extends AbstractBehavior<CookieFabric.Command> {
         System.out.println(cookieFabric);
         CompletionStage<Reply> result = AskPattern.ask(
                 cookieFabric,
-                replyTo -> new CookieFabric.GiveMeCookies(30, replyTo),
+                replyTo -> new CookieFabric.GiveMeCookies(3, replyTo),
                 // asking someone requires a timeout and a scheduler, if the timeout hits without
                 // response the ask is failed with a TimeoutException
                 Duration.ofSeconds(3),
