@@ -5,11 +5,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public class Consumer {
-    private static final Log log = new Log();
+    public static final Log log = new Log();
+
     private final Client client;
     private final int concurrentPolls;
     private final ExecutorService executor;
@@ -24,7 +24,8 @@ public class Consumer {
                 0,
                 TimeUnit.SECONDS,
                 new SynchronousQueue<>(),
-                r -> new Thread(r, "SQSConsumer"));
+                r -> new Thread(r, "consumer-tread-pool"),
+                new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
     public void subscribe(Function<String, CompletableFuture<String>> processor) {
@@ -40,37 +41,37 @@ public class Consumer {
 
     // Starts new polling flow
     private void startPollingFlow(Function<String, CompletableFuture<String>> processor, int i) {
-        log.debug(i + "");
-        log.measureStack();
         if (closed) {
             return;
         }
-//        log("Start polling...");
-        String initMsg = "[started] " + Thread.currentThread().getName();
+
+        String initMsg = String.format("[%s] started", Thread.currentThread().getName());
         // this can be a problem
         // Consumer poll next messages batch
         // After 4 unsuccessful tries, messages go a DLQ
-        client.receive(initMsg).whenComplete((receiveMessageResult, exception) -> {
+        // Mitigated by usage of ThreadPoolExecutor.CallerRunsPolicy()
+        client.receiveAsync(initMsg).whenComplete((receiveMessageResult, exception) -> {
             int k = i + 1;
             if (exception != null) {
                 log.debug(exception.getMessage());
                 startPollingFlow(processor, k);
                 return;
             }
-//            log("Submitting: " + receiveMessageResult.length());
-            String message = receiveMessageResult + " > [received] " + Thread.currentThread().getName();
 
-            processor.apply(message).whenComplete((result, processingException) -> {
-                if (processingException == null) {
-                    String newResult = result + " > [deleted] " + Thread.currentThread().getName();
-//                    Log.debug(newResult);
-                } else {
-                    processingException.printStackTrace();
-                }
+            String message = String.format("%s > [%s] received", receiveMessageResult, Thread.currentThread().getName());
 
-                startPollingFlow(processor, k);
+            executor.submit(() -> {
+                processor.apply(message).whenComplete((result, processingException) -> {
+                    if (processingException == null) {
+                        String newResult = String.format("%s > [%s] deleted", result, Thread.currentThread().getName());
+                        log.debug(newResult);
+                    } else {
+                        processingException.printStackTrace();
+                    }
+                });
             });
 
+            startPollingFlow(processor, k);
         });
     }
 }

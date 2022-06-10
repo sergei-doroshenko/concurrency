@@ -6,20 +6,23 @@ import java.util.concurrent.TimeUnit;
 public class Main2 {
     public static void main(String[] args) throws InterruptedException {
 
-        Client client = new Client();
+        Thread t = new Thread(() -> {
+            Client client = new Client();
 
-        Consumer consumer = new Consumer(client, 2, 2);
+            Consumer consumer = new Consumer(client, 2, 2);
 
-        consumer.subscribe(msg -> {
-            String newMsg = msg +  " > [processed] " + Thread.currentThread().getName();
-//            Consumer.log(newMsg);
-            try {
-                TimeUnit.SECONDS.sleep(0);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return CompletableFuture.completedFuture(newMsg);
+            consumer.subscribe(msg -> {
+                String newMsg = String.format("%s > [%s] processed", msg, Thread.currentThread().getName());
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return CompletableFuture.completedFuture(newMsg);
+            });
         });
+        t.start();
+
 
         Thread.currentThread().join();
     }
